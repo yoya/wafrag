@@ -20,7 +20,7 @@
             var that = this;
             xhr.onreadystatechange = function() {
                 if (xhr.readyState < 4) {
-                    console.log("skip");
+//                    console.debug("skip");
                 } else {
                     if (xhr.status != 200) {
                         console.log("xhr status:"+xhr.status+", "+url);
@@ -56,6 +56,12 @@
             console.debug("WAFrag::resume");
             if (this.loaded === false) return ; // skip
             this.player.resume();
+        },
+        addNoteListener: function(callback) {
+            this.player.addNoteListener(callback, midi);
+        },
+        addLylicListener: function(callback) {
+            this.player.addNoteLylicListener(callback);
         },
     },
     window.WAFrag = WAFrag;

@@ -14,6 +14,8 @@
         this.advance = 0;
         this.advanceOffset = 0;
         this.tempo = 0.5; // T120
+        this.noteListener = null;
+        this.lylicListener = null;
     }
     WAPlayer.prototype = {
         getVariableLengthValue: function(bin) { // for SMF tokenizer
@@ -21,11 +23,12 @@
             while (true) {
                 var value = bin.getUI8();
                 if (value & 0x80) {
-                    ret_value = (ret_value << 7) + (value & 0x7f);
+                    ret_value += value & 0x7f;
                 } else {
-                    ret_value = (ret_value << 7) + value;
+                    ret_value += value;
                     break;
                 }
+                ret_value = ret_value << 7;
             }
             return ret_value;
         },
@@ -68,7 +71,7 @@
                         runningStatus = status;
                     }
                     var type = status >> 4;
-                    var midi = 'midi,'+status.toString(16);
+                    var midi = [status];
                     if (type < 0xF) {
                         var midilen;
                         switch (type) {
@@ -78,23 +81,23 @@
                         case 0xB: // Control Change
                         case 0xE: // Pitch Bend Event
 //                            console.log(bin.getUI8().toString(16));
-                            midi += ","+bin.getUI8().toString(16)+","+bin.getUI8().toString(16);
+                            midi.push(bin.getUI8(), bin.getUI8());
                             break;
                         case 0xC: // Program Change
                         case 0xD: // Channel Aftertouch Event
-                            midi += ","+bin.getUI8().toString(16);
+                            midi.push(bin.getUI8());
                             break;
                         }
                     } else { // Meta Eent or System Exclusive
                         var type2 = status & 0x0f;
                         var metatype = bin.getUI8();
-                        midi += ','+metatype.toString(16);
+                        midi.push(metatype);
                         var o1 = bin.getByteOffset();
                         var len = this.getVariableLengthValue(bin);
                         var next = bin.getByteOffset() + len;
                         bin.setByteOffset(o1);
                         for (var j = o1; j < next ; j++) {
-                            midi += ','+bin.getUI8().toString(16);
+                            midi.push(bin.getUI8());
                         }
                     }
 //                    console.debug(midi);
@@ -106,6 +109,7 @@
             this.score = tracks.sort(
                 function(a, b) { return (a['advance']<b['advance'])?-1:((a['advance']==b['advance'])?0:1); }
             );
+//            console.debug(this.score);
             tracks = null;
         },
         play: function() {
@@ -113,30 +117,55 @@
                 console.debug("already playing");
                 return ;
             }
+            this.advanceOffset = 0;
+            this.advance = 0;
             this.playing = true;
             this.play2();
         },
         play2: function() {
             if (this.playing === false) { return false; }
-
             var score = this.score;
             var scoreLength = this.score.length;
             var currentAdvance = this.advance;
             console.debug("currentAdvance:"+currentAdvance);
             for (var o = this.advanceOffset ; (o < scoreLength) && (score[o].advance <= currentAdvance) ; o++) {
-                this.synth.post(score[o].midi);
+                var midi = score[o].midi;
+//                console.debug(midi);
+                if ((midi[0] & 0xf0) < 0xf0) {
+                    /* for MIDI link
+                    midi = midi.map(function(x) { return x.toString(16); });
+                    midi.unshift('midi');
+                    midi = midi.join(',');
+                    */
+                    this.synth.post(midi);
+                    if (this.noteListener) {
+                        this.noteListener(midi);
+                    }
+                } else {
+                    if ((midi[0] & 0x0f) === 0x0f) { // Meta Event
+                        switch (midi[1]) { // Meta Event Type
+                        case 0x51:
+                            var tempo = 0x100*(0x100*midi[3] + midi[4])+midi[5]; // usec
+                            this.tempo = tempo / 1000000; // seconds
+                            console.debug("tempo:"+this.tempo);
+                        }
+                    } else { // System Exclusive
+                        ;
+                    }
+                }
             }
             var nextOffset = o;
             if (nextOffset  < scoreLength) {
                 var nextAdvance = score[o].advance;
                 var delta =  nextAdvance - currentAdvance;
                 var deltaSecs = 1000 * delta * this.tempo /  this.division;
+//                console.debug('delta:'+delta+" nextAdvance:"+nextAdvance+" currentAdvance:"+currentAdvance);
+//                console.debug('tempo:'+this.tempo);
+//                console.debug('division:'+this.division);
+//                console.debug('wait for '+deltaSecs/1000+"[secs]");
                 setTimeout(this.play2.bind(this), deltaSecs);
-//                setTimeout(this.play2.bind(this), 1000);
-                //
             } else {
-                this.playing = false;
-                var nextAdvance = -1;
+                this.stop();
             }
             this.advanceOffset = nextOffset;
             this.advance = nextAdvance;
@@ -155,6 +184,12 @@
         resume: function() {
             this.playing = true;
             this.play2();
+        },
+        addNoteListener: function(callback) {
+            this.noteListener = callback;
+        },
+        addLylicListener: function(callback, midi) {
+            this.lylicListener = callback;
         },
     },
     window.WAPlayer = WAPlayer;
