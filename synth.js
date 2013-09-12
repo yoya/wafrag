@@ -35,11 +35,11 @@
                 }
                 switch (type) {
                 case 0x8: // Note Off
-                    console.debug("WASynth channel:"+channel+" WSGen::noteOff key:"+midi[1]+" velocity:"+midi[2]);
+//                    console.debug("WASynth channel:"+channel+" WSGen::noteOff key:"+midi[1]+" velocity:"+midi[2]);
                     this.genList[channel].noteOff(midi[1], midi[2]);
                     break;
                 case 0x9: // Note On
-                    console.debug("WASynth channel:"+channel+" WSGen::noteOn key:"+midi[1]+" velocity:"+midi[2]);
+//                    console.debug("WASynth channel:"+channel+" WSGen::noteOn key:"+midi[1]+" velocity:"+midi[2]);
                     this.genList[channel].noteOn(midi[1], midi[2]);
                     break;
                 }

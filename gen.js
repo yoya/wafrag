@@ -76,7 +76,7 @@
         },
         noteOff: function(key, valocity) {
             if (! this.oscTable[key]) {
-                console.debug("noteOff failed: key:"+key);
+                // console.debug("noteOff failed: key:"+key);
                 return ; // skip
             }
             var gain = this.gainTable[key];
@@ -87,21 +87,21 @@
                                               releaseEndTime);
             this.noteAppendGC(releaseEndTime, key);
             var elapse = (releaseEndTime - currentTime) * 1000;
-            // setTimeout(this.noteProcessGC.bind(this), elapse);
-            this.noteProcessGC();
+            setTimeout(this.noteProcessGC.bind(this), elapse + 0.1);
+            // this.noteProcessGC();
         },
         noteAppendGC: function(releaseEndTime, key) {
             this.noteGCList.push( [releaseEndTime, key] );
-            console.debug("append noteGCList:"+this.noteGCList.map(function(x) { return x[1]; }).join(','));
+//            console.debug("append noteGCList:"+this.noteGCList.map(function(x) { return x[1]; }).join(','));
         },
         noteCancelGC: function(key) {
-            console.debug('noteCancelGC key:'+key);
+  //          console.debug('noteCancelGC key:'+key);
             var noteGCList = this.noteGCList;
             for (var i = 0, n = noteGCList.length ; i < n ; i++) {
                 if (noteGCList[i][1] === key) {
-                    console.log("GCcancel key:"+key);
+//                    console.debug("GCcancel key:"+key);
                     this.noteGCList.splice(i, 1);
-                    console.debug("Cancel:: noteGCList:"+this.noteGCList.map(function(x) { return x[1]; }).join(','));
+//                    console.debug("Cancel:: noteGCList:"+this.noteGCList.map(function(x) { return x[1]; }).join(','));
                     return true;
                 }
             }
@@ -116,12 +116,12 @@
                     break;
                 }
                 var key = note[1];
-                console.debug("GC key:"+key);
+//                console.debug("GC key:"+key);
                 if (this.oscTable[key]) { // fpr noteOn,Off,Off pattern
                     var osc = this.oscTable[key];
                     var gain = this.gainTable[key];
                     osc.noteOff(0);
-                    gain .disconnect(this.mainGain);
+                    gain.disconnect(this.mainGain);
                     osc.disconnect(this.gainTable[key])
                     this.oscTable[key] = undefined;
                     this.gainTable[key] = undefined;
@@ -131,7 +131,7 @@
                 var a = this.noteGCList.length;
                 this.noteGCList.splice(0, i);
                 var b = this.noteGCList.length;
-                console.debug("process noteGCList:"+this.noteGCList.map(function(x) { return x[1]; }).join(','));
+//                console.debug("process noteGCList:"+this.noteGCList.map(function(x) { return x[1]; }).join(','));
             }
             return ;
         },

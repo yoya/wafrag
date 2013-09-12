@@ -127,7 +127,7 @@
             var score = this.score;
             var scoreLength = this.score.length;
             var currentAdvance = this.advance;
-            console.debug("currentAdvance:"+currentAdvance);
+//            console.debug("currentAdvance:"+currentAdvance);
             for (var o = this.advanceOffset ; (o < scoreLength) && (score[o].advance <= currentAdvance) ; o++) {
                 var midi = score[o].midi;
 //                console.debug(midi);
