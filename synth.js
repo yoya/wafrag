@@ -42,6 +42,9 @@
 //                    console.debug("WASynth channel:"+channel+" WSGen::noteOn key:"+midi[1]+" velocity:"+midi[2]);
                     this.genList[channel].noteOn(midi[1], midi[2]);
                     break;
+                case 0xC: // Program Change
+                    this.genList[channel].programChange(midi[1]);
+                    break;
                 }
             } else {
                 var type2 = status & 0x0F;
