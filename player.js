@@ -28,7 +28,7 @@
                     ret_value += value;
                     break;
                 }
-                ret_value = ret_value << 7;
+                ret_value <<= 7;
             }
             return ret_value;
         },
@@ -90,8 +90,10 @@
                         }
                     } else { // Meta Eent or System Exclusive
                         var type2 = status & 0x0f;
-                        var metatype = bin.getUI8();
-                        midi.push(metatype);
+                        if (type2 === 0xF) { // Meta Event
+                            var metatype = bin.getUI8();
+                            midi.push(metatype);
+                        }
                         var o1 = bin.getByteOffset();
                         var len = this.getVariableLengthValue(bin);
                         var next = bin.getByteOffset() + len;
