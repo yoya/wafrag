@@ -26,50 +26,75 @@
         this.bank = 0;
         this.program = 0;
         this.noteGCList = [];
-        this.gainScale = 0.5;
+        this.gainScale = this.gainScaleDefault = 0.5;
+        this.osc_type = 3; // triangle // default
+        this.gainRatioByProgram = 1;
     }
     WAGen.prototype = {
         programChange: function(program) {
             this.program = program;
+            console.debug("programChange:"+program);
+            switch (program) {
+            case 73:
+                this.osc_type = 0;
+                this.gainScale = this.gainScaleDefault * 1.5;
+                break;
+            case 45: //?
+                this.osc_type = 2;
+                this.gainScale = this.gainScaleDefault * 0.6;
+                break;
+            case 52:
+            case 46: // harp ??
+            default:
+                this.osc_type = 3; // triangle
+                this.gainScale = this.gainScaleDefault;
+                break;
+            }
         },
         noteOn: function(key, velocity) {
             if (velocity === 0) {
                 return this.noteOff(key, velocity);
             }
             var freq = musicScaleTable[key];
-            var currentTime = this.audioctx.currentTime;
-            var attack = this.gainScale * velocity / 128;
-            var decay = this.gainScale * velocity / 200;
+            var attack  = this.gainScale * velocity / 128;
+            var decay   = this.gainScale * velocity / 200;
             var sustain = this.gainScale * velocity / 256;
-            var attackTime = 3/freq; // XXX:3
+            var attackTime = 4/freq; // XXX:4
             if (! this.gainTable[key])  {
                 var gain = this.audioctx.createGainNode();
                 gain.gain.value = 0;
-                gain.gain.setValueAtTime(0, currentTime);
+                gain.gain.setValueAtTime(0, 0);
+                gain.gain.linearRampToValueAtTime(0, this.audioctx.currentTime);
                 gain.gain.linearRampToValueAtTime(attack,
-                                                  currentTime + attackTime);
+                                                  this.audioctx.currentTime
+                                                  + attackTime);
                 gain.gain.linearRampToValueAtTime(decay,
-                                                  currentTime + 0.05);
+                                                  this.audioctx.currentTime
+                                                  + 0.05);
                 gain.gain.linearRampToValueAtTime(sustain,
-                                                  currentTime + 1);
+                                                  this.audioctx.currentTime
+                                                  + 1);
                 gain.connect(this.mainGain);
                 var osc = this.audioctx.createOscillator();
                 osc.frequency.value = freq;
                 osc.connect(gain);
                 osc.noteOn(0);
-                osc.type = 3; // triangle
+                osc.type = this.osc_type;
                 this.oscTable[key] = osc;
                 this.gainTable[key] = gain;
             } else {
                 this.noteCancelGC(key);
                 var gain = this.gainTable[key];
-                gain.gain.cancelScheduledValues(currentTime);
+                gain.gain.cancelScheduledValues(this.audioctx.currentTime);
                 gain.gain.linearRampToValueAtTime(attack,
-                                                  currentTime + attackTime);
+                                                  this.audioctx.currentTime
+                                                  + attackTime);
                 gain.gain.linearRampToValueAtTime(decay,
-                                                  currentTime + 0.05);
+                                                  this.audioctx.currentTime
+                                                  + 0.05);
                 gain.gain.linearRampToValueAtTime(sustain,
-                                                  currentTime + 1);
+                                                  this.audioctx.currentTime
+                                                  + 1);
             }
             this.noteTable[key] ++;
         },
@@ -90,8 +115,7 @@
             var currentTime = this.audioctx.currentTime;
             var releaseEndTime = currentTime + 0.2;
             gain.gain.cancelScheduledValues(releaseEndTime);
-            gain.gain.linearRampToValueAtTime(0,
-                                              releaseEndTime);
+            gain.gain.linearRampToValueAtTime(0, releaseEndTime);
             this.noteAppendGC(releaseEndTime, key);
             var elapse = (releaseEndTime - currentTime) * 1000;
             setTimeout(this.noteProcessGC.bind(this, currentTime), elapse + 0.1);
