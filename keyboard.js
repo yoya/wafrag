@@ -16,6 +16,11 @@
     WAKeyboard.prototype = {
         init: function() {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	    for (var c = 0 ; c < 16 ; c++) {
+		for (var k = 0 ; k < 128 ; k++) {
+		    this.fill(c, k, "rgb(200, 200, 200");
+		}
+	    }
         },
         handle: function(midi) {
 //	    console.debug(midi);
@@ -34,8 +39,43 @@
 	    }
 	},
 	keyPosition: function(channel, key) {
-	    var x = key * 7;
-	    var y = channel * 20;
+	    var x = key * 6;
+	    var y = 12 + channel * 24;
+	    var octave = (key / 12) | 0;
+	    var key_in_octave = key % 12;
+	    switch (key_in_octave) {
+	    case 11:
+		x -= 3;
+	    case 10:
+		x -= 3;
+	    case 9:
+		x -= 3;
+	    case 8:
+		x -= 3;
+	    case 7:
+		x -= 3;
+	    case 6:
+		x -= 3;
+	    case 5:
+	    case 4:
+		x -= 3;
+	    case 3:
+		x -= 3;
+	    case 2:
+		x -= 3;
+	    case 1:
+		x -= 3;
+	    }
+	    x -= octave * 3*10;
+	    switch (key_in_octave) {
+	    case 1:
+	    case 3:
+	    case 6:
+	    case 8:
+	    case 10:
+		y -= 11;
+	    }
+
 	    return [x, y];
         },
 	fill: function(channel, key, fillStyle) {

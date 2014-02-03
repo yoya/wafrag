@@ -14,7 +14,7 @@
 <button id="resume" onclick="resume();"> Resume </button>
 
 <hr>
-<canvas id="keyboard" width="640" height="640"> </canvas>
+<canvas id="keyboard" width="450" height="380"> </canvas>
 <hr>
 
 <script type="text/javascript" src="bin.js"> </script>
@@ -32,6 +32,7 @@ if (document.addEventListener) {
 
 var wafrag = new WAFrag();
 var keyboard = new WAKeyboard('keyboard');
+keyboard.init();
 
 function setup() {
     var url = location.search.substr(1).split("&")[0];
