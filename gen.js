@@ -106,6 +106,9 @@
                 return false;
             }
             this.noteTable[key] --;
+            if (this.noteTable[key] > 0) {
+                return false;
+            }
             if (! this.oscTable[key]) {
                 // console.debug("noteOff failed: key:"+key);
                 return ; // skip
