@@ -12,7 +12,7 @@ function displayDir($dirname) {
             echo "<tr><td> ";
             displayDir($f);
             echo "</td></tr>\n";
-        } elseif (strpos($e, '.mid') !== false) {
+        } elseif (stripos($e, '.mid') !== false) {
             echo "<tr><td> ";
             echo "<a href=\"debug.html?$f\">$f</a>" ;
             echo "</td></tr>\n";
