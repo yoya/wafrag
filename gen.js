@@ -101,13 +101,11 @@
         },
         noteOff: function(key, velocity) {
 //            console.debug("noteOff: key:"+key+" velocity:"+velocity);
-            this.noteTable[key] --;
-            if (this.noteTable[key] !== 0) {
-                if (this.noteTable[key] < 0) {
-                    this.noteTable[key] = 0;
-                }
+            if (this.noteTable[key] <= 0) {
+//                this.noteTable[key] = 0;
                 return false;
             }
+            this.noteTable[key] --;
             if (! this.oscTable[key]) {
                 // console.debug("noteOff failed: key:"+key);
                 return ; // skip
