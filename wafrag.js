@@ -7,7 +7,8 @@
 (function() {
     var audioctx;
     if (! audioctx) { // singleton
-       audioctx = new webkitAudioContext();
+       var audioContext = window.webkitAudioContext || window.AudioContext
+       audioctx = new audioContext();
     }
     var WAFrag = function() {
         this.loaded = false;
