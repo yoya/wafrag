@@ -15,10 +15,11 @@
     }
     WAKeyboard.prototype = {
         init: function() {
+            this.canvas.style.backgroundColor = "rgb(0, 0, 0)";
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	    for (var c = 0 ; c < 16 ; c++) {
 		for (var k = 0 ; k < 128 ; k++) {
-		    this.fill(c, k, "rgb(200, 200, 200");
+		    this.fill(c, k, "rgb(0, 50, 80");
 		}
 	    }
         },
@@ -95,13 +96,19 @@
 		return this.noteOff(channel, key, velocity);
 	    }
 //	    console.debug("WAKeyboard::noteOn");
-	    this.fill(channel, key, "rgb(100, 155, 155");
+	    var r = (255 * velocity / 127) | 0;
+	    var g = (255 * velocity / 127*2) | 0;
+	    var b = (255 * velocity / 127*4) | 0;
+	    r = (r<256)?r:255;
+	    g = (g<256)?g:255;
+	    b = (b<256)?b:255;
+	    this.fill(channel, key, "rgb("+r+","+g+","+b+")");
 	},
 	noteOff: function(channel, key, velocity) {
 	    var ctx = this.ctx;
 //	    console.debug("WAKeyboard::noteOff");
 	    var posi = this.keyPosition(channel, key);
-	    this.fill(channel, key, "rgb(200, 200, 200");
+		    this.fill(channel, key, "rgb(0, 80, 80");
 	},
     }
     window.WAKeyboard = WAKeyboard;
