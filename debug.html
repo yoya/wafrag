@@ -13,11 +13,17 @@
 <button id="suspend" onclick="suspend();"> Suspend </button>
 <button id="resume" onclick="resume();"> Resume </button>
 
+<hr>
+<canvas id="keyboard" width="640" height="640"> </canvas>
+<hr>
+
 <script type="text/javascript" src="bin.js"> </script>
 <script type="text/javascript" src="gen.js"> </script>
 <script type="text/javascript" src="synth.js"> </script>
 <script type="text/javascript" src="player.js"> </script>
 <script type="text/javascript" src="wafrag.js"> </script>
+<script type="text/javascript" src="keyboard.js"> </script>
+
 <script type="text/javascript">
 
 if (document.addEventListener) {
@@ -25,10 +31,12 @@ if (document.addEventListener) {
 }
 
 var wafrag = new WAFrag();
+var keyboard = new WAKeyboard('keyboard');
 
 function setup() {
     var url = location.search.substr(1).split("&")[0];
     wafrag.loadSMF(url?url:"akatomb.mid", progress);
+    wafrag.addNoteListener(keyboard);
 }
 
 function progress(i, n) {
@@ -42,6 +50,5 @@ function resume() { wafrag.resume(); }
 
 </script>
 
-<hr>
 <address></address>
 </body> </html>

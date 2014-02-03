@@ -58,11 +58,11 @@
             if (this.loaded === false) return ; // skip
             this.player.resume();
         },
-        addNoteListener: function(callback) {
-            this.player.addNoteListener(callback, midi);
+        addNoteListener: function(handler) {
+            this.player.addNoteListener(handler);
         },
         addLylicListener: function(callback) {
-            this.player.addNoteLylicListener(callback);
+            this.player.addNoteLylicListener(handler);
         },
     },
     window.WAFrag = WAFrag;

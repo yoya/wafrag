@@ -141,7 +141,7 @@
                     */
                     this.synth.post(midi);
                     if (this.noteListener) {
-                        this.noteListener(midi);
+                        this.noteListener.handle(midi);
                     }
                 } else {
                     if ((midi[0] & 0x0f) === 0x0f) { // Meta Event
@@ -187,11 +187,13 @@
             this.playing = true;
             this.play2();
         },
-        addNoteListener: function(callback) {
-            this.noteListener = callback;
+        addNoteListener: function(handler) {
+	    console.debug("addNoteListener");
+//	    console.debug(callback);
+            this.noteListener = handler;
         },
-        addLylicListener: function(callback, midi) {
-            this.lylicListener = callback;
+        addLylicListener: function(handler) {
+            this.lylicListener = handler;
         },
     },
     window.WAPlayer = WAPlayer;
