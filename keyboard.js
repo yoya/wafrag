@@ -96,9 +96,9 @@
 		return this.noteOff(channel, key, velocity);
 	    }
 //	    console.debug("WAKeyboard::noteOn");
-	    var r = (255 * velocity / 127) | 0;
-	    var g = (255 * velocity / 127*2) | 0;
-	    var b = (255 * velocity / 127*4) | 0;
+	    var r = 10 + (255 * velocity / 127) | 0;
+	    var g = 40 + (255 * velocity / 127*3) | 0;
+	    var b = 40 + (255 * velocity / 127*5) | 0;
 	    r = (r<256)?r:255;
 	    g = (g<256)?g:255;
 	    b = (b<256)?b:255;
