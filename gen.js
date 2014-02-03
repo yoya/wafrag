@@ -55,13 +55,14 @@
             if (velocity === 0) {
                 return this.noteOff(key, velocity);
             }
+//	    console.debug("noteOn("+key+", "+velocity+")");
             var freq = musicScaleTable[key];
             var attack  = this.gainScale * velocity / 128;
             var decay   = this.gainScale * velocity / 200;
             var sustain = this.gainScale * velocity / 256;
             var attackTime = 4/freq; // XXX:4
             if (! this.gainTable[key])  {
-                var gain = this.audioctx.createGainNode();
+                var gain = this.audioctx.createGain();
                 gain.gain.value = 0;
                 gain.gain.setValueAtTime(0, 0);
                 gain.gain.linearRampToValueAtTime(0, this.audioctx.currentTime);
