@@ -59,7 +59,7 @@
 	},
 	noteOff: function(channel, key, velocity) {
 	    var ctx = this.ctx;
-	    console.debug("WAKeyboard::noteOff");
+//	    console.debug("WAKeyboard::noteOff");
 	    var posi = this.keyPosition(channel, key);
 	    this.fill(channel, key, "rgb(200, 200, 200");
 	},
