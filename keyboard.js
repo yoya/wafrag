@@ -19,7 +19,7 @@
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	    for (var channel = 0 ; channel < 16 ; channel++) {
 		for (var key = 0 ; key < 128 ; key++) {
-		    this.fill(channel, key, 210, 40, 20);
+		    this.fill(channel, key, 210, 30, 20);
 		}
 	    }
         },
@@ -108,7 +108,7 @@
 	    var ctx = this.ctx;
 //	    console.debug("WAKeyboard::noteOff");
 	    var posi = this.keyPosition(channel, key);
-            this.fill(channel, key, 210, 30, 30);
+            this.fill(channel, key, 210, 30, 20);
 	},
     }
     window.WAKeyboard = WAKeyboard;
