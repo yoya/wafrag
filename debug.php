@@ -29,5 +29,5 @@ $query = $_SERVER{'QUERY_STRING'};
 if (strlen($query) > 0) {
     displayDir($query);
 } else {
-    displayDir('.');
+    displayDir('midi');
 }
