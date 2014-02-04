@@ -80,10 +80,10 @@
                                                   + sustainTime);
                 gain.connect(this.mainGain);
                 var osc = this.audioctx.createOscillator();
+                osc.type = this.osc_type;
                 osc.frequency.value = freq;
                 osc.connect(gain);
-                osc.noteOn(0);
-                osc.type = this.osc_type;
+                osc.start(0);
                 this.oscTable[key] = osc;
                 this.gainTable[key] = gain;
             } else {
@@ -156,7 +156,7 @@
                 if (this.oscTable[key]) { // fpr noteOn,Off,Off pattern
                     var osc = this.oscTable[key];
                     var gain = this.gainTable[key];
-                    osc.noteOff(0);
+                    osc.stop(0);
                     gain.disconnect(this.mainGain);
                     osc.disconnect(this.gainTable[key]);
                     this.oscTable[key] = undefined;
