@@ -59,8 +59,11 @@
             var freq = musicScaleTable[key];
             var attack  = this.gainScale * velocity / 128;
             var decay   = this.gainScale * velocity / 200;
-            var sustain = this.gainScale * velocity / 256;
-            var attackTime = 4/freq; // XXX:4
+//            var sustain = this.gainScale * velocity / 256;
+            var sustain = this.gainScale * velocity / 512;
+            var attackTime = 5/freq; // XXX:4
+            var decayTime =  0.1;
+            var sustainTime = 2;
             if (! this.gainTable[key])  {
                 var gain = this.audioctx.createGain();
                 gain.gain.value = 0;
@@ -71,10 +74,10 @@
                                                   + attackTime);
                 gain.gain.linearRampToValueAtTime(decay,
                                                   this.audioctx.currentTime
-                                                  + 0.05);
+                                                  + decayTime);
                 gain.gain.linearRampToValueAtTime(sustain,
                                                   this.audioctx.currentTime
-                                                  + 1);
+                                                  + sustainTime);
                 gain.connect(this.mainGain);
                 var osc = this.audioctx.createOscillator();
                 osc.frequency.value = freq;
@@ -92,10 +95,10 @@
                                                   + attackTime);
                 gain.gain.linearRampToValueAtTime(decay,
                                                   this.audioctx.currentTime
-                                                  + 0.05);
+                                                  + decayTime);
                 gain.gain.linearRampToValueAtTime(sustain,
                                                   this.audioctx.currentTime
-                                                  + 1);
+                                                  + sustainTime);
             }
             this.noteTable[key] ++;
         },
