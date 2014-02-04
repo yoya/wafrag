@@ -41,7 +41,7 @@
 	},
 	keyPosition: function(channel, key) {
 	    var x = key * 6;
-	    var y = 12 + channel * 24;
+	    var y = 12 + channel * 26;
 	    var octave = (key / 12) | 0;
 	    var key_in_octave = key % 12;
 	    switch (key_in_octave) {
