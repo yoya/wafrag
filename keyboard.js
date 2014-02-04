@@ -100,8 +100,8 @@
 	    }
 //	    console.debug("WAKeyboard::noteOn");
 	    var h = 150 + 360*channel/16 * 11;
-	    var s = 100;
-	    var l = 10 + 90 * velocity/127;
+	    var s = 20 + 60 * velocity/127;
+	    var l = 30 + 60 * velocity/127;
 	    this.fill(channel, key, h, s, l);
 	},
 	noteOff: function(channel, key, velocity) {
