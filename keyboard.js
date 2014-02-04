@@ -17,9 +17,9 @@
         init: function() {
             this.canvas.style.backgroundColor = "rgb(0, 0, 0)";
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	    for (var c = 0 ; c < 16 ; c++) {
-		for (var k = 0 ; k < 128 ; k++) {
-		    this.fill(c, k, "rgb(0, 50, 80");
+	    for (var channel = 0 ; channel < 16 ; channel++) {
+		for (var key = 0 ; key < 128 ; key++) {
+		    this.fill(channel, key, 210, 40, 20);
 		}
 	    }
         },
@@ -79,11 +79,14 @@
 
 	    return [x, y];
         },
-	fill: function(channel, key, fillStyle) {
+	fill: function(channel, key, h, s, l) {
 	    var ctx = this.ctx;
 	    var posi = this.keyPosition(channel, key);
 	    var size = [5, 10];
-            ctx.fillStyle = fillStyle;
+	    h = h % 360;
+	    s = (s<100)?(s|0):100;
+	    l = (l<100)?(l|0):100;
+            ctx.fillStyle = "hsl("+h+","+s+"%,"+l+"%)";
 	    ctx.beginPath();
 	    ctx.moveTo(posi[0], posi[1]);
 	    ctx.lineTo(posi[0]+size[0], posi[1]);
@@ -96,19 +99,16 @@
 		return this.noteOff(channel, key, velocity);
 	    }
 //	    console.debug("WAKeyboard::noteOn");
-	    var r = 10 + (255 * velocity / 127) | 0;
-	    var g = 40 + (255 * velocity / 127*3) | 0;
-	    var b = 40 + (255 * velocity / 127*5) | 0;
-	    r = (r<256)?r:255;
-	    g = (g<256)?g:255;
-	    b = (b<256)?b:255;
-	    this.fill(channel, key, "rgb("+r+","+g+","+b+")");
+	    var h = 150 + 360*channel/16 * 7;
+	    var s = 100;
+	    var l = 100 * velocity/127;
+	    this.fill(channel, key, h, s, l);
 	},
 	noteOff: function(channel, key, velocity) {
 	    var ctx = this.ctx;
 //	    console.debug("WAKeyboard::noteOff");
 	    var posi = this.keyPosition(channel, key);
-		    this.fill(channel, key, "rgb(0, 80, 80");
+            this.fill(channel, key, 210, 30, 30);
 	},
     }
     window.WAKeyboard = WAKeyboard;
