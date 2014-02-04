@@ -10,7 +10,7 @@ function displayDir($dirname) {
         $f = $dirname.'/'.$e;
         if (is_dir($f)) {
             echo "<tr><td> ";
-            displayDir($f);
+            echo "<a href=\"debug.php?$f\">$f</a>" ;
             echo "</td></tr>\n";
         } elseif (stripos($e, '.mid') !== false) {
             echo "<tr><td> ";
@@ -23,4 +23,11 @@ function displayDir($dirname) {
     echo "</table>\n";
 }
 
-displayDir('.');
+
+$query = $_SERVER{'QUERY_STRING'};
+    
+if (strlen($query) > 0) {
+    displayDir($query);
+} else {
+    displayDir('.');
+}
