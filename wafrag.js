@@ -38,6 +38,11 @@
             xhr.responseType = 'arraybuffer';
             xhr.send(null);
         },
+        readSMF: function(data) { // from string
+            this.player = new WAPlayer(audioctx);
+            this.player.loadSMF(data);
+            this.loaded = true;
+        },
         play: function(smf) {
             console.debug("WAFrag::play");
             if (this.loaded === false) return ; // skip

@@ -5,13 +5,14 @@
 <title> wafrag debug </title>
 </head>
 
-<body bgcolor="black">
+<body bgcolor="#88ccaa">
 <h1></h1>
 
 <button id="play" onclick="play();"> Play </button>
 <button id="stop" onclick="stop();"> Stop </button>
 <button id="suspend" onclick="suspend();"> Suspend </button>
 <button id="resume" onclick="resume();"> Resume </button>
+<input type="file" id="file" name="file" />
 
 <hr>
 <canvas id="keyboard" width="450" height="390"> </canvas>
@@ -28,16 +29,29 @@
 
 if (document.addEventListener) {
     document.addEventListener("DOMContentLoaded", setup);
+    document.getElementById('file').addEventListener('change', fileHandle, false);
 }
 
 var wafrag = new WAFrag();
 var keyboard = new WAKeyboard('keyboard');
 keyboard.init();
 
+function fileHandle(evt) {
+     var f = evt.target.files[0];
+     var reader = new FileReader();
+     reader.onload = function (e) {
+         wafrag.readSMF(e.target.result);
+         wafrag.addNoteListener(keyboard);
+     }
+     reader.readAsArrayBuffer(f);
+}
+
 function setup() {
     var url = location.search.substr(1).split("&")[0];
-    wafrag.loadSMF(url?url:"akatomb.mid", progress);
-    wafrag.addNoteListener(keyboard);
+    if (url) {
+        wafrag.loadSMF(url?url:"akatomb.mid", progress);
+        wafrag.addNoteListener(keyboard);
+    }
 }
 
 function progress(i, n) {
