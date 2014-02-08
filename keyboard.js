@@ -15,8 +15,9 @@
     }
     WAKeyboard.prototype = {
         init: function() {
-            this.canvas.style.backgroundColor = "rgb(0, 0, 0)";
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+//            this.canvas.style.backgroundColor = "rgb(0, 0, 0);";
+//            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	    for (var channel = 0 ; channel < 16 ; channel++) {
 		for (var key = 0 ; key < 128 ; key++) {
 		    this.fill(channel, key, 210, 30, 20);
