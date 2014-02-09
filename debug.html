@@ -15,7 +15,8 @@
 <input type="file" id="file" name="file" />
 
 <hr>
-<canvas id="keyboard" width="450" height="390"> </canvas>
+<canvas id="keyboard" width="450" height="390"> </canvas><br />
+<div id="status"> status </div>
 <hr>
 
 <script type="text/javascript" src="bin.js"> </script>
@@ -26,6 +27,10 @@
 <script type="text/javascript" src="keyboard.js"> </script>
 
 <script type="text/javascript">
+
+function status(status) {
+    document.getElementById('status').innerHTML = status;
+}
 
 if (document.addEventListener) {
     document.addEventListener("DOMContentLoaded", setup);
@@ -58,10 +63,10 @@ function progress(i, n) {
     console.log("i:"+i+", n:"+n);
 }
 
-function play() { wafrag.play(); }
-function stop() { wafrag.stop(); }
-function suspend() { wafrag.suspend(); }
-function resume() { wafrag.resume(); }
+function play() { wafrag.play() && status("play"); }
+function stop() { wafrag.stop() && status("stop"); }
+function suspend() { wafrag.suspend() && status("suspend"); }
+function resume() { wafrag.resume() && status("resume"); }
 
 </script>
 

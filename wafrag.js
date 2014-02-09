@@ -45,23 +45,23 @@
         },
         play: function(smf) {
             console.debug("WAFrag::play");
-            if (this.loaded === false) return ; // skip
-            this.player.play();
+            if (this.loaded === false) return false; // skip
+            return this.player.play();
         },
         stop: function(smf) {
             console.debug("WAFrag::stop");
-            if (this.loaded === false) return ; // skip
-            this.player.stop();
+            if (this.loaded === false) return false; // skip
+            return this.player.stop();
         },
         suspend: function(smf) {
             console.debug("WAFrag::suspend");
-            if (this.loaded === false) return ; // skip
-            this.player.suspend();
+            if (this.loaded === false) return false; // skip
+            return this.player.suspend();
         },
         resume: function(smf) {
             console.debug("WAFrag::resume");
-            if (this.loaded === false) return ; // skip
-            this.player.resume();
+            if (this.loaded === false) return false; // skip
+            return this.player.resume();
         },
         addNoteListener: function(handler) {
             this.player.addNoteListener(handler);

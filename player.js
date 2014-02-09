@@ -119,12 +119,13 @@
         play: function() {
             if (this.playing) {
                 console.debug("already playing");
-                return ;
+                return false;
             }
             this.advanceOffset = 0;
             this.advance = 0;
             this.playing = true;
             this.play2();
+            return true;
         },
         play2: function() {
             if (this.playing === false) { return false; }
@@ -188,14 +189,17 @@
             this.advanceOffset = 0;
             this.advance = 0;
             this.synth.soundOff();
+            return true;
         },
         suspend: function() {
             this.playing = false;
             this.synth.soundOff();
+            return true;
         },
         resume: function() {
             this.playing = true;
             this.play2();
+            return true;
         },
         addAdvanceListener: function(handler) {
             console.debug("addAdvanceListener");
