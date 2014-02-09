@@ -1,9 +1,18 @@
 <?php
 
 function displayDir($dirname) {
+    if (strpos($dirname, '..') !== false) {
+        $dirname = '.';
+    }
     $d = opendir($dirname);
     echo "<table border=\"1\">\n";
+    $dirs = array();
     while ($e = readdir($d)) {
+        $dirs []= $e;
+    }
+    closedir($d);
+    sort($dirs);
+    foreach ($dirs as $e) {
         if (strncmp($e, '.', 1) === 0) {
             continue; // skip
         }
@@ -25,7 +34,7 @@ function displayDir($dirname) {
 
 
 $query = $_SERVER{'QUERY_STRING'};
-    
+
 if (strlen($query) > 0) {
     displayDir($query);
 } else {
