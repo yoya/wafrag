@@ -14,6 +14,7 @@
         this.advance = 0;
         this.advanceOffset = 0;
         this.tempo = 0.5; // T120
+        this.advanceListeners = [];
         this.noteListeners = [];
         this.metaListeners = [];
         this.sysexListeners = [];
@@ -131,6 +132,9 @@
             var scoreLength = this.score.length;
             var currentAdvance = this.advance;
 //            console.debug("currentAdvance:"+currentAdvance);
+            for (var i = 0, n = this.advanceListeners.length; i < n ; i++) {
+                this.advanceListeners[i].handleAdvance(currentAdvance, score[scoreLength - 1].advance);
+            }
             for (var o = this.advanceOffset ; (o < scoreLength) && (score[o].advance <= currentAdvance) ; o++) {
                 var midi = score[o].midi;
 //                console.debug(midi);
@@ -192,6 +196,10 @@
         resume: function() {
             this.playing = true;
             this.play2();
+        },
+        addAdvanceListener: function(handler) {
+            console.debug("addAdvanceListener");
+            this.advanceListeners.push(handler);
         },
         addNoteListener: function(handler) {
 	    console.debug("addNoteListener");

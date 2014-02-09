@@ -24,7 +24,7 @@
 		}
 	    }
         },
-        handle: function(midi) {
+        handleNote: function(midi) {
 //	    console.debug(midi);
             var status = midi[0];
             var type = status >> 4;
