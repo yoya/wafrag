@@ -60,10 +60,10 @@
             var attack  = this.gainScale * velocity / 128;
             var decay   = this.gainScale * velocity / 200;
 //            var sustain = this.gainScale * velocity / 256;
-            var sustain = this.gainScale * velocity / 512;
+            var sustain = this.gainScale * velocity / 300;
             var attackTime = 5/freq; // XXX:4
             var decayTime =  0.1;
-            var sustainTime = 2;
+            var sustainTime = 1.5;
             if (! this.gainTable[key])  {
                 var gain = this.audioctx.createGainNode();
                 gain.gain.value = 0;
