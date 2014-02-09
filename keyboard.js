@@ -17,7 +17,9 @@
         init: function() {
 //            this.canvas.style.backgroundColor = "rgb(0, 0, 0);";
 //            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            var ctx = this.ctx;
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	    for (var channel = 0 ; channel < 16 ; channel++) {
 		for (var key = 0 ; key < 128 ; key++) {
 		    this.fill(channel, key, 210, 30, 20);
@@ -88,12 +90,7 @@
 	    s = (s<100)?(s|0):100;
 	    l = (l<100)?(l|0):100;
             ctx.fillStyle = "hsl("+h+","+s+"%,"+l+"%)";
-	    ctx.beginPath();
-	    ctx.moveTo(posi[0], posi[1]);
-	    ctx.lineTo(posi[0]+size[0], posi[1]);
-	    ctx.lineTo(posi[0]+size[0], posi[1]+size[1]);
-	    ctx.lineTo(posi[0], posi[1]+size[1]);
-	    ctx.fill();
+            this.ctx.fillRect(posi[0], posi[1], size[0], size[1]);6
 	},
 	noteOn: function(channel, key, velocity) {
 	    if (velocity == 0) {
