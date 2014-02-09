@@ -79,6 +79,7 @@ function play() {
     if (wafrag.play()) {
         status("play");
         keyboard.init();
+        progress.init();
     }
 }
 function stop() { wafrag.stop() && status("stop"); }
