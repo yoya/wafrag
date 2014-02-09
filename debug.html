@@ -16,6 +16,7 @@
 
 <hr>
 <canvas id="keyboard" width="450" height="390"> </canvas><br />
+<canvas id="progress" width="450" height="32"> </canvas><br />
 <div id="status"> status </div>
 <hr>
 
@@ -25,6 +26,7 @@
 <script type="text/javascript" src="player.js"> </script>
 <script type="text/javascript" src="wafrag.js"> </script>
 <script type="text/javascript" src="keyboard.js"> </script>
+<script type="text/javascript" src="progress.js"> </script>
 
 <script type="text/javascript">
 
@@ -39,10 +41,14 @@ if (document.addEventListener) {
 
 var wafrag = new WAFrag();
 var keyboard = new WAKeyboard('keyboard');
+var progress = new WAProgress('progress');
 
 function setup() {
     keyboard.init();
+    progress.init();
     wafrag.addNoteListener(keyboard);
+    wafrag.addAdvanceListener(progress);
+    wafrag.addNoteListener(progress);
 }
 
 function fileHandle(evt) {
