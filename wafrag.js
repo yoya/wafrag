@@ -63,6 +63,9 @@
             if (this.loaded === false) return false; // skip
             return this.player.resume();
         },
+        addAdvanceListener: function(handler) {
+            this.player.addAdvanceListener(handler);
+        },
         addNoteListener: function(handler) {
             this.player.addNoteListener(handler);
         },
