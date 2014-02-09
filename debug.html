@@ -33,29 +33,35 @@ function status(status) {
 }
 
 if (document.addEventListener) {
-    document.addEventListener("DOMContentLoaded", setup);
+    document.addEventListener("DOMContentLoaded", pageHandle);
     document.getElementById('file').addEventListener('change', fileHandle, false);
 }
 
 var wafrag = new WAFrag();
 var keyboard = new WAKeyboard('keyboard');
-keyboard.init();
+
+function setup() {
+    keyboard.init();
+    wafrag.addNoteListener(keyboard);
+}
 
 function fileHandle(evt) {
      var f = evt.target.files[0];
      var reader = new FileReader();
      reader.onload = function (e) {
          wafrag.readSMF(e.target.result);
-         wafrag.addNoteListener(keyboard);
+         setup();
+         status("loaded from file(local)");
      }
      reader.readAsArrayBuffer(f);
 }
 
-function setup() {
+function pageHandle() {
     var url = location.search.substr(1).split("&")[0];
     if (url) {
         wafrag.loadSMF(url?url:"akatomb.mid", progress);
-        wafrag.addNoteListener(keyboard);
+        setup();
+        status("loaded from url(remote)");
     }
 }
 
@@ -63,7 +69,12 @@ function progress(i, n) {
     console.log("i:"+i+", n:"+n);
 }
 
-function play() { wafrag.play() && status("play"); }
+function play() {
+    if (wafrag.play()) {
+        status("play");
+        keyboard.init();
+    }
+}
 function stop() { wafrag.stop() && status("stop"); }
 function suspend() { wafrag.suspend() && status("suspend"); }
 function resume() { wafrag.resume() && status("resume"); }
