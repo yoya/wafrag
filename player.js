@@ -14,8 +14,9 @@
         this.advance = 0;
         this.advanceOffset = 0;
         this.tempo = 0.5; // T120
-        this.noteListener = null;
-        this.lylicListener = null;
+        this.noteListeners = [];
+        this.metaListeners = [];
+        this.sysexListeners = [];
     }
     WAPlayer.prototype = {
         getVariableLengthValue: function(bin) { // for SMF tokenizer
@@ -140,8 +141,8 @@
                     midi = midi.join(',');
                     */
                     this.synth.post(midi);
-                    if (this.noteListener) {
-                        this.noteListener.handle(midi);
+                    for (var i = 0, n = this.noteListeners.length; i < n ; i++) {
+                        this.noteListeners[i].handleNote(midi);
                     }
                 } else {
                     if ((midi[0] & 0x0f) === 0x0f) { // Meta Event
@@ -151,8 +152,13 @@
                             this.tempo = tempo / 1000000; // seconds
                             console.debug("tempo:"+this.tempo);
                         }
+			for (var i = 0, n = this.metaListeners.length; i < n ; i++) {
+                            this.metaListeners[i].handleMeta(midi);
+			}
                     } else { // System Exclusive
-                        ;
+			for (var i = 0, n = this.sysexListeners.length; i < n ; i++) {
+                            this.sysexListeners[i].handleSysEx(midi);
+			}
                     }
                 }
             }
@@ -189,11 +195,15 @@
         },
         addNoteListener: function(handler) {
 	    console.debug("addNoteListener");
-//	    console.debug(callback);
-            this.noteListener = handler;
+            this.noteListeners.push(handler);
         },
-        addLylicListener: function(handler) {
-            this.lylicListener = handler;
+        addMetaListener: function(handler) {
+	    console.debug("addMetaListener");
+            this.metaListeners.push(handler);
+        },
+        addSysExListener: function(handler) {
+	    console.debug("addSysExListener");
+            this.sysexListeners.push(handler);
         },
     },
     window.WAPlayer = WAPlayer;
