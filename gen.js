@@ -89,10 +89,14 @@
             } else {
                 this.noteCancelGC(key);
                 var gain = this.gainTable[key];
-                gain.gain.cancelScheduledValues(this.audioctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0,
+                                                  this.audioctx.currentTime
+                                                  + attackTime/2);
                 gain.gain.linearRampToValueAtTime(attack,
                                                   this.audioctx.currentTime
                                                   + attackTime);
+                gain.gain.cancelScheduledValues(this.audioctx.currentTime
+					       + attackTime + 0.001);
                 gain.gain.linearRampToValueAtTime(decay,
                                                   this.audioctx.currentTime
                                                   + decayTime);
