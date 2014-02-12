@@ -123,11 +123,11 @@
             var gain = this.gainTable[key];
             var currentTime = this.audioctx.currentTime;
             var releaseEndTime = currentTime + 0.2;
-            gain.gain.cancelScheduledValues(releaseEndTime);
             gain.gain.linearRampToValueAtTime(0, releaseEndTime);
-            this.noteAppendGC(releaseEndTime, key);
+            gain.gain.cancelScheduledValues(releaseEndTime + 0.001);
+            this.noteAppendGC(releaseEndTime + 0.001, key);
             var elapse = (releaseEndTime - currentTime) * 1000;
-            setTimeout(this.noteProcessGC.bind(this, currentTime), elapse + 0.1);
+            setTimeout(this.noteProcessGC.bind(this, currentTime), elapse + 100);
             // this.noteProcessGC();
         },
         noteAppendGC: function(releaseEndTime, key) {
