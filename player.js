@@ -64,7 +64,6 @@
                 var runningStatus = null;
                 while (bin.getByteOffset() < nextOffset) {
                     var delta = this.getVariableLengthValue(bin);
-                    advance += delta;
                     var status = bin.getUI8();
                     if (status < 0x80) {
                         status = runningStatus;
@@ -72,6 +71,10 @@
                     } else {
                         runningStatus = status;
                     }
+		    if (status === 0xFF) { // MetaEvent
+			delta = 0;
+		    }
+                    advance += delta;
                     var type = status >> 4;
                     var midi = [status];
                     if (type < 0xF) {
@@ -129,6 +132,8 @@
         },
         play2: function() {
             if (this.playing === false) { return false; }
+            var currentTime = this.audioctx.currentTime;
+            var _currentTime = new Date()*1;
             var score = this.score;
             var scoreLength = this.score.length;
             var currentAdvance = this.advance;
@@ -176,7 +181,18 @@
 //                console.debug('tempo:'+this.tempo);
 //                console.debug('division:'+this.division);
 //                console.debug('wait for '+deltaSecs/1000+"[secs]");
-                setTimeout(this.play2.bind(this), deltaSecs);
+		var elapse = (this.audioctx.currentTime - currentTime);
+		var _elapse = (new Date()*1) - _currentTime;
+		if (elapse !== 0) {
+		    console.log('elapse:'+elapse);
+		    console.log(new Date()*1);
+		    console.log('_elapse:'+_elapse);
+		}
+		deltaSecs -= elapse*1000;
+		if (deltaSecs < 0) {
+		    console.log('deltaSecs:'+deltaSecs);
+		}
+                setTimeout(this.play2.bind(this), (deltaSecs<=0)?0:deltaSecs);
             } else {
                 this.stop();
             }
