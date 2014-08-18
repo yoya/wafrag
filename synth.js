@@ -7,7 +7,7 @@
 (function() {
     var WASynth = function(audioctx) {
         this.audioctx = audioctx;
-        this.mainGain = audioctx.createGainNode();
+        this.mainGain = audioctx.createGain();
         this.mainGain.gain.value = 0.4; // XXX
         this.mainGain.connect(audioctx.destination);
         var genList = new Array(16);

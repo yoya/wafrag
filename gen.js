@@ -65,7 +65,7 @@
             var decayTime =  0.1;
             var sustainTime = 1.5;
             if (! this.gainTable[key])  {
-                var gain = this.audioctx.createGainNode();
+                var gain = this.audioctx.createGain();
                 gain.gain.value = 0;
                 gain.gain.setValueAtTime(0, 0);
                 gain.gain.linearRampToValueAtTime(0, this.audioctx.currentTime);
