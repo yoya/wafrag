@@ -15,8 +15,10 @@
 <input type="file" id="file" name="file" />
 
 <hr>
-<canvas id="keyboard" width="450" height="390"> </canvas><br />
-<canvas id="progress" width="450" height="32"> </canvas><br />
+<canvas id="keyboard" width="450" height="390"> </canvas>
+<canvas id="noteflow" width="450" height="390"> </canvas><br />
+<canvas id="progress" width="450" height="32"> </canvas>
+ 
 <div id="status"> status </div>
 <hr>
 
@@ -27,6 +29,7 @@
 <script type="text/javascript" src="wafrag.js"> </script>
 <script type="text/javascript" src="keyboard.js"> </script>
 <script type="text/javascript" src="progress.js"> </script>
+<script type="text/javascript" src="noteflow.js"> </script>
 
 <script type="text/javascript">
 
@@ -41,12 +44,16 @@ if (document.addEventListener) {
 
 var wafrag = new WAFrag();
 var keyboard = new WAKeyboard('keyboard');
+var noteflow = new WANoteflow('noteflow');
 var progress = new WAProgress('progress');
 
 function setup() {
     keyboard.init();
+    noteflow.init();
     progress.init();
     wafrag.addNoteListener(keyboard);
+    wafrag.addNoteListener(noteflow);
+    wafrag.addMetaListener(noteflow);
     wafrag.addAdvanceListener(progress);
     wafrag.addNoteListener(progress);
 }
@@ -80,12 +87,29 @@ function play() {
         status("play");
         keyboard.init();
         progress.init();
+        noteflow.init();
+        noteflow.start(60); // fps of scroll.
     }
 }
-function stop() { wafrag.stop() && status("stop"); }
-function suspend() { wafrag.suspend() && status("suspend"); }
-function resume() { wafrag.resume() && status("resume"); }
+function stop() {
+    if (wafrag.stop()) {
+        status("stop");
+        noteflow.stop();
+    }
+}
 
+function suspend() {
+    if (wafrag.suspend()) {
+        status("suspend");
+        noteflow.stop();
+    }
+ }
+function resume() {
+    if (wafrag.resume()) {
+        status("resume");
+        noteflow.start(60); // fps of scroll.
+    } 
+}
 </script>
 
 <address></address>

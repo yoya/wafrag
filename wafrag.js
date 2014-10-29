@@ -69,8 +69,8 @@
         addNoteListener: function(handler) {
             this.player.addNoteListener(handler);
         },
-        addLylicListener: function(callback) {
-            this.player.addNoteLylicListener(handler);
+        addMetaListener: function(handler) {
+            this.player.addMetaListener(handler);
         },
     },
     window.WAFrag = WAFrag;
