@@ -71,9 +71,9 @@
                     } else {
                         runningStatus = status;
                     }
-		    if (status === 0xFF) { // MetaEvent
-			delta = 0;
-		    }
+//		    if (status === 0xFF) { // MetaEvent
+//			delta = 0;
+//		    }
                     advance += delta;
                     var type = status >> 4;
                     var midi = [status];
@@ -161,6 +161,7 @@
                             var tempo = 0x100*(0x100*midi[3] + midi[4])+midi[5]; // usec
                             this.tempo = tempo / 1000000; // seconds
                             console.debug("tempo:"+this.tempo);
+                            break;
                         }
 			for (var i = 0, n = this.metaListeners.length; i < n ; i++) {
                             this.metaListeners[i].handleMeta(midi);
