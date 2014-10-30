@@ -50,12 +50,15 @@
             var offset = 4 + 4 + headerLength;
             bin.setByteOffset(offset);
             // Tracks
-            for (var i = 0 ; i < nTracks ; i++) {
-//                console.debug("track i:"+i);
-                if (bin.getString(4) !== 'MTrk') {
-                    console.error("no MTrk chunk");
-                    return false;
+//            for (var i = 0 ; i < nTracks ; i++) {
+            while (bin.hasNextData(8)) {
+		var chunkSig = bin.getString(4);
+                if ((chunkSig !== 'MTrk') &&
+		    (chunkSig !== 'XFIH') && (chunkSig !== 'XFKM')) {
+                    console.error("no MTrk,XFIH,XFKM chunk:"+chunkSig);
+		    break;
                 }
+                console.debug("chunk:"+chunkSig);
                 var trackLength = bin.getUI32BE();
                 var nextOffset = offset + 4 + 4 + trackLength;
                 // chunk tokenize

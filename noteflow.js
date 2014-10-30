@@ -59,14 +59,17 @@
 	},
         handleMeta: function(midi) {
             var type = midi[1];
+            var len = midi[2];
 	    console.debug("noteflow::handleMeta type="+type);
             if (type === 5) { // Lyric type
-                this.noteOn(14, 127, 127);
+		if (len > 1) {
+                    this.noteOn(-1, 127, 127);
+                }
 	    }
 	},
 	keyPosition: function(channel, key) {
 	    var x = key * 6;
-	    var y = 12 + channel * 26;
+	    var y = 12 + channel * 26 + 26; // +20 for lyric
 	    var octave = (key / 12) | 0;
 	    var key_in_octave = key % 12;
 	    switch (key_in_octave) {
@@ -101,7 +104,6 @@
 	    case 10:
 		y -= 11;
 	    }
-
 	    return [x, y];
         },
 	fill: function(channel, key, h, s, l) {
